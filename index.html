@@ -352,7 +352,7 @@
                       <td>0.012</td>
                   </tr>
               </table>
-              
+
 
                 <h3 class="title is-4">Training Results</h3>
                 We trained the BeT models for 50 epochs with the default hyperparameters with different encoders.
@@ -366,6 +366,21 @@
               </div>
               <!--/ Experiments and Results. -->
 
+              <!-- Model Architecture. -->
+              <h2 class="title is-2 has-text-centered">Conclusion</h2>
+
+              <div class="content has-text-lefted">
+                <p>
+                  In our project, we experimented with various encoder architectures fore image embdding, including VLM, VAE, and ResNet. Notably, DIP-VAE outperformed ResNet during rollout scenarios. This superior performance can be attributed to the DIP-VAE being trained directly on images from the training set videos, unlike the pre-trained ResNet-18, which was trained on the CIFAR dataset primarily for classification tasks. Consequently, ResNet-18 was less effective in accurately representing the specific observations required for our application.
+                </p>
+                <p>
+                  Further observations revealed that although ResNet exhibited similar performance to DIP-VAE on the validation set, its performance significantly deteriorated during rollout. This discrepancy likely arises because the training set videos encompass a limited variety of states, whereas rollout scenarios introduce a broader range of states, including many that are unseen during training.
+                </p>
+
+              </div>
+              <div class="content has-text-lefted">
+              </div>
+              <!--/ Model Architecture. -->
             </div>
           </div>
           <!--/ VLM-BeT -->
