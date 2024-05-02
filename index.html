@@ -276,6 +276,18 @@
                 <p>
                   To highlight the complexity of performing long sequences of actions, we use the Relay Kitchen Environment where a Franka robot manipulates a virtual kitchen environment. We use the relay policy learning dataset with 566 demonstrations collected by human participants wearing VR headsets. The participants completed a sequence of four object-interaction tasks in each episode . There are a total of seven interactable objects in the kitchen: a microwave, a kettle, a slide cabinet, a hinge cabinet, a light switch, and two burner knobs. This dataset contains two different kinds of multi-modality: one from the inherent noise in human demonstrations, and another from the demonstrators' intent.
                 </p>
+                <div class="columns">
+                  <div class="column is-half">
+                    <!-- Video -->
+                    <video id="dollyzoom" autoplay controls muted loop playsinline width="100%">
+                      <source src="./static/videos/000_view0.mp4" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="column is-half">
+                    <!-- Image -->
+                    <img src="./static/images/demo_freq.png" alt="Datasets">
+                  </div>
+                </div>
                 <h3 class="title is-4">Rollout Results</h3>
                 <p>
                   We compare the performance of BeT with different encoders in learning from demonstrations. We measure the probability of n tasks being completed by the model within the allotted 280 timesteps. Evaluations are over 500 rollouts for all the BeT with encoders.
