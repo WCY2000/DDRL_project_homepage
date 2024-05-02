@@ -195,7 +195,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-
+            The introduction of the Behavior Transformer (BeT) <sup>1</sup> started to address the challenge of leveraging large, unlabeled, human-generated datasets for Offline Reinforcement Learning (RL) and Behavioral Cloning. It utilizes a transformative approach by incorporating action discretization and multi-task action correction techniques into standard transformer architectures, enabling effective modeling of complex, multi-modal human behaviors. BeT has demonstrated superior performance compared to other models in the Relay Kitchen environment, utilizing robot and object state observations. This success prompts us to explore its potential in scenarios involving partial observations, such as image sequences, which are more commonly encountered in real-life settings.
           </p>
         </div>
       </div>
@@ -225,11 +225,11 @@
           <!-- VLM-BeT -->
           <div class="columns is-centered">
             <div class="column is-full-width">
-              <h2 class="title is-3">VLM-BeT: Behavior Transformers with Vision-Language Models</h2>
+              <!-- <h2 class="title is-3">VLM-BeT: Behavior Transformers with Vision-Language Models</h2> -->
 
               <!-- Model Architecture. -->
-              <h3 class="title is-4">Model Architecture</h3>
-              <!-- <img src="./static/images/model-fig.jpg" alt="VLM-BeT Model Architecture"> -->
+              <h2 class="title is-2 has-text-centered">Model Pipeline</h2>
+              <img src="./static/images/pipeline.png" alt="VLM-BeT Model Architecture">
               <div class="content has-text-centered">
                 <!-- <p>
                   (Left) Flat SSM directly maps a sensor sequence to an output sequence.
@@ -243,16 +243,126 @@
               </div>
               <!--/ Model Architecture. -->
 
-              <!-- Experiments and Results. -->
-              <h3 class="title is-4">Experiments and Results</h3>
+              <!-- Encoder Selection. -->
+              <h2 class="title is-2 has-text-centered">Encoder Selection</h2>
               <!-- <img src="./static/images/result_table.png" alt="VLM-BeT Model Results"> -->
-              <div class="content has-text-centered">
-                <!-- <p>
-                  Comparison of MSE prediction losses for flat and <span class="dnerf">HiSS</span> models on CSP-Bench. Reported numbers are averaged over 5 seeds for the best performing models.
-                  MW: Marker Writing, IS: Intrinsic Slip, R:RoNIN, V: VECtor, JC: Joystick Control, TC: TotalCapture
-                </p> -->
+              <div class="content has-text-lefted">
+                <h3 class="title is-4">Vision-Language Models: Language Segment-Anything (Lang-Sam) <sup>2</sup></h3>
+                <p>
+                  We employ distinct prompts for each task to extract latent variables that serve as image embeddings. This technique allows us to tailor the model's input to the specific characteristics of each task, enhancing the relevance and accuracy of the generated embeddings.
+                </p>
+                <h3 class="title is-4">Variational Autoencoder: Disentangled Inferred Prior VAE (DIP-VAE) <sup>3</sup></h3>
+                <p>
+                  We trained the model using all images extracted from the training set videos, employing the latent variables produced by the encoder as image embeddings. Building upon the foundational architecture of the original VAE, our approach incorporates the DIP-VAE model, which introduces an additional regularization term in the loss function. This term is designed to encourage the latent variables to exhibit statistical independence, thus promoting a disentangled representation that enhances interpretability and usability in downstream tasks. The output dimension of DIP-VAE: [32,64,128,256]
+                </p>
+                <img src="./static/images/DIPVAE_reconstruction.png" alt="DIPVAE reconstruction">
+                <p>The figure shows the original image and reconstructed image from DIP-VAE on the validation set randomly selected from the videos.</p>
+                <h3 class="title is-4"> Pretrained ResNet18</sup></h3>
+                <p>
+                  We tried pre-trained ResNet 18 to generate image embeddings with an output dimension of 512.
+                </p>
+
               </div>
-              <div class="content has-text-centered">
+              <div class="content has-text-lefted">
+              </div>
+              <!--/ Encoder Selection. -->
+
+
+              <!-- Experiments and Results. -->
+              <h2 class="title is-2 has-text-centered">Experiments and Results</h2>
+              <!-- <img src="./static/images/result_table.png" alt="VLM-BeT Model Results"> -->
+              <div class="content has-text-lefted">
+                <h3 class="title is-4">Franka kitchen environment</h3>
+                <p>
+                  To highlight the complexity of performing long sequences of actions, we use the Relay Kitchen Environment where a Franka robot manipulates a virtual kitchen environment. We use the relay policy learning dataset with 566 demonstrations collected by human participants wearing VR headsets. The participants completed a sequence of four object-interaction tasks in each episode . There are a total of seven interactable objects in the kitchen: a microwave, a kettle, a slide cabinet, a hinge cabinet, a light switch, and two burner knobs. This dataset contains two different kinds of multi-modality: one from the inherent noise in human demonstrations, and another from the demonstrators' intent.
+                </p>
+                <h3 class="title is-4">Rollout Results</h3>
+                <p>
+                  We compare the performance of BeT with different encoders in learning from demonstrations. We measure the probability of n tasks being completed by the model within the allotted 280 timesteps. Evaluations are over 500 rollouts for all the BeT with encoders.
+                </p>
+                <style>
+                  table {
+                      width: 100%;
+                      border-collapse: collapse;
+                  }
+                  th, td {
+                      border-left: 1px solid #ddd; /* Add vertical lines */
+                      padding: 8px; /* Padding for aesthetic spacing inside cells */
+                      text-align: center; /* Center text horizontally in each cell */
+                  }
+                  th:first-child, td:first-child {
+                      border-left: none; /* Remove border from the first cell in each row */
+                  }
+              </style>
+              <table border="1">
+                  <tr>
+                      <th></th>
+                      <th>1</th>
+                      <th>2</th>
+                      <th>3</th>
+                      <th>4</th>
+                      <th>5</th>
+                  </tr>
+                  <tr>
+                      <td><strong>Original BeT</strong></td>
+                      <td>0.99</td>
+                      <td>0.93</td>
+                      <td>0.71</td>
+                      <td>0.44</td>
+                      <td>0.02</td>
+                  </tr>
+                  <tr>
+                      <td><strong>Resnet18 + BeT</strong></td>
+                      <td>0.71</td>
+                      <td>0.336</td>
+                      <td>0.138</td>
+                      <td>0.016</td>
+                      <td>0</td>
+                  </tr>
+                  <tr>
+                      <td><strong>DIPVAE (dim = 32)+ BeT</strong></td>
+                      <td>0.826</td>
+                      <td>0.294</td>
+                      <td>0.07</td>
+                      <td>0.004</td>
+                      <td>0</td>
+                  </tr>
+                  <tr>
+                      <td><strong>DIPVAE (dim = 64) + BeT</strong></td>
+                      <td>0.944</td>
+                      <td>0.682</td>
+                      <td>0.436</td>
+                      <td>0.152</td>
+                      <td>0.02</td>
+                  </tr>
+                  <tr>
+                      <td><strong>DIPVAE (dim = 128) + BeT</strong></td>
+                      <td>0.986</td>
+                      <td>0.738</td>
+                      <td>0.502</td>
+                      <td>0.184</td>
+                      <td>0.014</td>
+                  </tr>
+                  <tr>
+                      <td><strong>DIPVAE (dim = 256) + BeT</strong></td>
+                      <td>0.978</td>
+                      <td>0.744</td>
+                      <td>0.53</td>
+                      <td>0.126</td>
+                      <td>0.012</td>
+                  </tr>
+              </table>
+              
+
+                <h3 class="title is-4">Training Results</h3>
+                We trained the BeT models for 50 epochs with the default hyperparameters with different encoders.
+                <img src="./static/images/train.png" alt="training plot">
+                <img src="./static/images/val.png" alt="validation plot">
+
+
+
+              </div>
+              <div class="content has-text-lefted">
               </div>
               <!--/ Experiments and Results. -->
 
@@ -296,13 +406,13 @@
             <sup>[1]</sup> Shafiullah, N. M. M., Cui, Z. J., Altanzaya, A., and Pinto, L. Behavior Transformers: Cloning k modes with one stone. Neural Information Processing Systems, 2022.
           </p>
           <p style="text-align: left;">
-            <sup>[2]</sup> Kumar, A., Sattigeri, P., and Balakrishnan, A. Variational Inference of Disentangled Latent Concepts from Unlabeled Observations. International Conference on Learning Representations, 2018.
+            <sup>[2]</sup> https://github.com/paulguerrero/lang-sam
           </p>
           <p style="text-align: left;">
-            <sup>[3]</sup> Li, J., Li, D., Xiong, C., and Hoi, S. C. H. BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. International Conference on Machine Learning, 2022
+            <sup>[3]</sup> Kumar, A., Sattigeri, P., and Balakrishnan, A. Variational Inference of Disentangled Latent Concepts from Unlabeled Observations. International Conference on Learning Representations, 2018.
           </p>
           <p style="text-align: left;">
-            <sup>[4]</sup> https://github.com/paulguerrero/lang-sam
+            <sup>[4]</sup> Li, J., Li, D., Xiong, C., and Hoi, S. C. H. BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. International Conference on Machine Learning, 2022
           </p>
           <p>
             This website is licensed under a <a rel="license"
