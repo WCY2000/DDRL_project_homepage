@@ -195,7 +195,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            The introduction of the Behavior Transformer (BeT) <sup>1</sup> started to address the challenge of leveraging large, unlabeled, human-generated datasets for Offline Reinforcement Learning (RL) and Behavioral Cloning. It utilizes a transformative approach by incorporating action discretization and multi-task action correction techniques into standard transformer architectures, enabling effective modeling of complex, multi-modal human behaviors. BeT has demonstrated superior performance compared to other models in the Relay Kitchen environment, utilizing robot and object state observations. This success prompts us to explore its potential in scenarios involving partial observations, such as image sequences, which are more commonly encountered in real-life settings.
+            The introduction of the Behavior Transformer (BeT) <sup>[1]</sup> started to address the challenge of leveraging large, unlabeled, human-generated datasets for Offline Reinforcement Learning (RL) and Behavioral Cloning. It utilizes a transformative approach by incorporating action discretization and multi-task action correction techniques into standard transformer architectures, enabling effective modeling of complex, multi-modal human behaviors. BeT has demonstrated superior performance compared to other models in the Relay Kitchen environment, utilizing robot and object state observations. This success prompts us to explore its potential in scenarios involving partial observations, such as image sequences, which are more commonly encountered in real-life settings.
           </p>
         </div>
       </div>
@@ -247,17 +247,17 @@
               <h2 class="title is-2 has-text-centered">Encoder Selection</h2>
               <!-- <img src="./static/images/result_table.png" alt="VLM-BeT Model Results"> -->
               <div class="content has-text-lefted">
-                <h3 class="title is-4">Vision-Language Models: Language Segment-Anything (Lang-Sam) <sup>2</sup></h3>
+                <h3 class="title is-4">Vision-Language Models: Language Segment-Anything (Lang-Sam) <sup>[2]</sup></h3>
                 <p>
                   We employ distinct prompts for each task to extract latent variables that serve as image embeddings. This technique allows us to tailor the model's input to the specific characteristics of each task, enhancing the relevance and accuracy of the generated embeddings.
                 </p>
-                <h3 class="title is-4">Variational Autoencoder: Disentangled Inferred Prior VAE (DIP-VAE) <sup>3</sup></h3>
+                <h3 class="title is-4">Variational Autoencoder: Disentangled Inferred Prior VAE (DIP-VAE) <sup>[3]</sup></h3>
                 <p>
                   We trained the model using all images extracted from the training set videos, employing the latent variables produced by the encoder as image embeddings. Building upon the foundational architecture of the original VAE, our approach incorporates the DIP-VAE model, which introduces an additional regularization term in the loss function. This term is designed to encourage the latent variables to exhibit statistical independence, thus promoting a disentangled representation that enhances interpretability and usability in downstream tasks. The output dimension of DIP-VAE: [32,64,128,256]
                 </p>
                 <img src="./static/images/DIPVAE_reconstruction.png" alt="DIPVAE reconstruction">
                 <p>The figure shows the original image and reconstructed image from DIP-VAE on the validation set randomly selected from the videos.</p>
-                <h3 class="title is-4"> Pretrained ResNet18</sup></h3>
+                <h3 class="title is-4"> Pretrained ResNet18  <sup>[4]</sup></h3>
                 <p>
                   We tried pre-trained ResNet 18 to generate image embeddings with an output dimension of 512.
                 </p>
@@ -427,7 +427,10 @@
             <sup>[3]</sup> Kumar, A., Sattigeri, P., and Balakrishnan, A. Variational Inference of Disentangled Latent Concepts from Unlabeled Observations. International Conference on Learning Representations, 2018.
           </p>
           <p style="text-align: left;">
-            <sup>[4]</sup> Li, J., Li, D., Xiong, C., and Hoi, S. C. H. BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. International Conference on Machine Learning, 2022
+            <sup>[4]</sup> https://www.tensorflow.org/tfmodels/vision/image_classification
+          </p>
+          <p style="text-align: left;">
+            <sup>[5]</sup> Li, J., Li, D., Xiong, C., and Hoi, S. C. H. BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation. International Conference on Machine Learning, 2022
           </p>
           <p>
             This website is licensed under a <a rel="license"
